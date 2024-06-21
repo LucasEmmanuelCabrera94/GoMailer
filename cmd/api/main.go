@@ -8,10 +8,14 @@ import (
 )
 
 func main() {
+	senderMailController := initSenderMail()
+
+	apiRouter := http.NewAPIRouter(senderMailController)
+	apiRouter.Run()
+}
+
+func initSenderMail() *controllers.SenderMailController {
 	senderMailRepository := repository.NewSenderMailRepository()
 	senderMailService := service.NewSenderMailService(senderMailRepository)
-	senderMailController := controllers.NewSenderMailController(senderMailService)
-	apiRouter := http.NewAPIRouter(senderMailController)
-
-	apiRouter.Run()
+	return controllers.NewSenderMailController(senderMailService)
 }

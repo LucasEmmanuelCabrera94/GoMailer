@@ -23,6 +23,5 @@ func (api *ApiRouter) Run() {
 }
 
 func (api *ApiRouter) configRoutes(r *gin.Engine) {
-	//r.GET("/ping", func(c *gin.Context) { api.pingCtrl.Ping(c) })
 	r.POST("/messages/:id", func(c *gin.Context) { api.senderMailController.SenderMail(c) })
 }

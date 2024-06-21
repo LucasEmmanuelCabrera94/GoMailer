@@ -8,5 +8,8 @@ type SenderMail struct {
 }
 
 type SenderMailParams struct {
-	To string `json:"to"`
+	From    string `json:"from"`
+	To      string `json:"to"`
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
 }
