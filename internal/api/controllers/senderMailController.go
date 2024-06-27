@@ -20,7 +20,7 @@ func NewSenderMailController(service *sender_mail.SenderMailService) *SenderMail
 }
 
 func (ctrl *SenderMailController) SenderMail(c *gin.Context) {
-	var params domain.SenderMailParams
+	var params []domain.SenderMailParams
 
 	if err := c.ShouldBindJSON(&params); err != nil {
 		if validationErrs, ok := err.(validator.ValidationErrors); ok {

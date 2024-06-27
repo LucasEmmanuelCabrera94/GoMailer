@@ -14,7 +14,7 @@ func NewSenderMailService(repository *sender_mail.SenderMailRepository) *SenderM
 	return &SenderMailService{SenderMailRepository: repository}
 }
 
-func (svc *SenderMailService) SendEmail(ctx context.Context, params domain.SenderMailParams) error {
+func (svc *SenderMailService) SendEmail(ctx context.Context, params []domain.SenderMailParams) error {
 	err := svc.SenderMailRepository.SendEmail(ctx, params)
 	if err != nil {
 		switch err.(type) {
