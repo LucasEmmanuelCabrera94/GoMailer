@@ -4,7 +4,6 @@ import (
 	"context"
 	"goMailer/internal/domain"
 	"goMailer/internal/repositories/sender_mail"
-	"log"
 )
 
 type SenderMailService struct {
@@ -16,7 +15,16 @@ func NewSenderMailService(repository *sender_mail.SenderMailRepository) *SenderM
 }
 
 func (svc *SenderMailService) SendEmail(ctx context.Context, params domain.SenderMailParams) error {
-	log.Println("paso por Service.")
-	svc.SenderMailRepository.SendEmail(ctx, params)
+	err := svc.SenderMailRepository.SendEmail(ctx, params)
+	if err != nil {
+		switch err.(type) {
+		case *domain.ValidationError:
+			return err
+		case *domain.ExternalServiceError:
+			return err
+		default:
+			return &domain.ExternalServiceError{Err: err}
+		}
+	}
 	return nil
 }
