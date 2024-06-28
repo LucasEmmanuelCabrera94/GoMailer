@@ -23,5 +23,5 @@ func (api *ApiRouter) Run() {
 }
 
 func (api *ApiRouter) configRoutes(r *gin.Engine) {
-	r.POST("/messages/:id", func(c *gin.Context) { api.senderMailController.SenderMail(c) })
+	r.POST("/messages", func(c *gin.Context) { api.senderMailController.SenderMail(c) })
 }

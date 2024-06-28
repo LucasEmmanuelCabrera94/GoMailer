@@ -6,11 +6,15 @@ import (
 	"goMailer/internal/repositories/sender_mail"
 )
 
-type SenderMailService struct {
-	SenderMailRepository *sender_mail.SenderMailRepository
+type Service interface {
+	SendEmail(ctx context.Context, params []domain.SenderMailParams) error
 }
 
-func NewSenderMailService(repository *sender_mail.SenderMailRepository) *SenderMailService {
+type SenderMailService struct {
+	SenderMailRepository sender_mail.Repository
+}
+
+func NewSenderMailService(repository sender_mail.Repository) *SenderMailService {
 	return &SenderMailService{SenderMailRepository: repository}
 }
 

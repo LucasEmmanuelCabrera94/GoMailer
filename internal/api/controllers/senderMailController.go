@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"goMailer/internal/domain"
 	"goMailer/internal/services/sender_mail"
+	"goMailer/internal/utils"
 	"net/http"
 	"strings"
 
@@ -12,10 +12,10 @@ import (
 )
 
 type SenderMailController struct {
-	SenderMailService *sender_mail.SenderMailService
+	SenderMailService sender_mail.Service
 }
 
-func NewSenderMailController(service *sender_mail.SenderMailService) *SenderMailController {
+func NewSenderMailController(service sender_mail.Service) *SenderMailController {
 	return &SenderMailController{SenderMailService: service}
 }
 
@@ -24,7 +24,7 @@ func (ctrl *SenderMailController) SenderMail(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&params); err != nil {
 		if validationErrs, ok := err.(validator.ValidationErrors); ok {
-			errorMessages := translateValidationErrors(validationErrs)
+			errorMessages := utils.TranslateValidationErrors(validationErrs)
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error":   "Invalid request payload",
 				"details": strings.Join(errorMessages, ", "),
@@ -48,27 +48,4 @@ func (ctrl *SenderMailController) SenderMail(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Email sent successfully"})
-}
-
-func translateValidationErrors(err validator.ValidationErrors) []string {
-	var errorMessages []string
-
-	for _, err := range err {
-		var message string
-
-		switch err.Tag() {
-		case "required":
-			message = fmt.Sprintf("The field '%s' is required.", err.Field())
-		case "email":
-			message = fmt.Sprintf("The field '%s' must be a valid email address.", err.Field())
-		case "nefield":
-			message = fmt.Sprintf("The field '%s' must not be the same as field '%s'.", err.Field(), err.Param())
-		default:
-			message = fmt.Sprintf("Validation error on field '%s' with tag '%s'.", err.Field(), err.Tag())
-		}
-
-		errorMessages = append(errorMessages, message)
-	}
-
-	return errorMessages
 }

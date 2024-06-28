@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "Test Coverage",
+		"type": "shell",
+		"command": "go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out",
+		"options": {
+        "env": {
+			"SENDGRID_API_KEY": "${env:SENDGRID_API_KEY}"
+        }
+      },
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		},
+		"problemMatcher": []
+	  }
+	]
+  }
+  
